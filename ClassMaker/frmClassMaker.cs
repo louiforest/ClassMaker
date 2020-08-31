@@ -24,6 +24,13 @@ namespace ClassMaker
         {
             bSelectSql.Click += SelectSqlFile;
             bGenerate.Click += Generate;
+            cbAddSelectAll.Click += CbAddSelectAll_Click;
+        }
+
+        private void CbAddSelectAll_Click(object sender, EventArgs e)
+        {
+            if (cbAddSelectAll.Checked && !cbAddGenerateRecord.Checked)
+                cbAddGenerateRecord.Checked = true;
         }
 
         private void InitDGVUsing()
@@ -50,9 +57,8 @@ namespace ClassMaker
 
             Usings.Add("using System;");
             Usings.Add("using System.Collections.Generic;");
-            Usings.Add("using System.Linq;");
-            Usings.Add("using System.Text;");
-            Usings.Add("using System.Threading.Tasks;");
+            Usings.Add("using MySql.Data;");
+            Usings.Add("using MySql.Data.MySqlClient;");
 
             return Usings;
         }
@@ -90,11 +96,6 @@ namespace ClassMaker
             string STab = "    ";
             string Q = '"'.ToString();
 
-            fWrite.WriteLine("");
-
-            if (cbRegion.Checked)
-                fWrite.WriteLine(STab + STab + "#region DataBaseQuery");
-
             if (tbl.TableName.EndsWith("s"))
                 ClassName = tbClassPrefix.Text + tbl.TableName.Substring(0, tbl.TableName.Length - 1);
             else
@@ -102,7 +103,7 @@ namespace ClassMaker
 
             PluralClassName = ClassName + "s";
 
-            fWrite.WriteLine(STab + STab +"private static " + PluralClassName + " GenerateRecords(CDBReader reader, object argument)");
+            fWrite.WriteLine(STab + STab +"private static " + PluralClassName + " GenerateRecords(MySqlDataReader reader, object argument)");
             fWrite.WriteLine(STab + STab + "{");
             fWrite.WriteLine(STab + STab + STab + PluralClassName + " records = new " + PluralClassName + "();");
             fWrite.WriteLine(STab + STab + STab + ClassName + " rec;");
@@ -143,20 +144,55 @@ namespace ClassMaker
             fWrite.WriteLine("");
             fWrite.WriteLine(STab + STab + STab + STab + "records.Add(rec);");
             fWrite.WriteLine(STab + STab + STab + "}");
+            fWrite.WriteLine(STab + STab + STab + "reader.Close();");
+            fWrite.WriteLine("");
             fWrite.WriteLine(STab + STab + STab + "return records;");
             fWrite.WriteLine(STab + STab + "}");
-            
-            if (cbRegion.Checked)
-                fWrite.WriteLine(STab + STab + "#endregion");
+        }
+
+        private void AddSelectAll(CSqlTable tbl, System.IO.StreamWriter fWrite, string PluralClassName)
+        {
+            string STab = "    ";
+            string Guil = '"'.ToString();
+
+            fWrite.WriteLine(STab + STab + "public static " + tbClassPrefix.Text + PluralClassName + " SelectAll()");
+            fWrite.WriteLine(STab + STab + "{");
+
+            fWrite.WriteLine(STab + STab + STab + tbClassPrefix.Text + PluralClassName + " response;");
+            fWrite.WriteLine(STab + STab + STab + "string Sql = string.Empty;");
+            fWrite.WriteLine("");
+            fWrite.WriteLine(STab + STab + STab + "Sql += " + Guil + "SELECT *" + Guil + " + Environment.NewLine;");
+            fWrite.WriteLine(STab + STab + STab + "Sql += " + Guil + " FROM " + tbl.TableName + Guil + " + Environment.NewLine;");
+            fWrite.WriteLine("");
+            fWrite.WriteLine(STab + STab + STab + "CDBConnection con = new CDBConnection();");
+            fWrite.WriteLine(STab + STab + STab + "response = GenerateRecords(con.ExecuteQuery(Sql), string.Empty);");
+            fWrite.WriteLine(STab + STab + STab + "con.CloseConnection();");
+            fWrite.WriteLine("");
+            fWrite.WriteLine(STab + STab + STab + "return response;");
+
+            fWrite.WriteLine(STab + STab + "}");
         }
 
         private void GenerateClassFiles(List<CSqlTable> tables)
         {
+            string SingleClassName = string.Empty;
+            string PluralClassName = string.Empty;
             string OutputFileName = string.Empty;
             string STab = "    ";
 
             foreach (CSqlTable tbl in tables)
             {
+                if (tbl.TableName.ToLower().EndsWith("s"))
+                {
+                    PluralClassName = tbl.TableName;
+                    SingleClassName = PluralClassName.Substring(0, PluralClassName.Length - 1);
+                }
+                else
+                {
+                    SingleClassName = tbl.TableName;
+                    PluralClassName = SingleClassName + "s";
+                }                
+                
                 OutputFileName = tbClassPrefix.Text + tbl.TableName + ".cs";
                 using (System.IO.StreamWriter fWrite = new System.IO.StreamWriter(OutputFileName, false))
                 {
@@ -168,9 +204,9 @@ namespace ClassMaker
                     fWrite.WriteLine("{");
 
                     if (string.IsNullOrEmpty(tbInhirits.Text))
-                        fWrite.WriteLine(STab + tbClassModifiers.Text + " class " + tbClassPrefix.Text + tbl.TableName);
+                        fWrite.WriteLine(STab + tbClassModifiers.Text + " class " + tbClassPrefix.Text + SingleClassName);
                     else
-                        fWrite.WriteLine(STab + tbClassModifiers.Text + " class " + tbClassPrefix.Text + tbl.TableName + " : " +tbInhirits.Text);
+                        fWrite.WriteLine(STab + tbClassModifiers.Text + " class " + tbClassPrefix.Text + SingleClassName + " : " +tbInhirits.Text);
 
                     fWrite.WriteLine(STab + "{");
 
@@ -204,10 +240,27 @@ namespace ClassMaker
                         fWrite.WriteLine(string.Empty);
                     }
 
+                    if (cbRegion.Checked)
+                        fWrite.WriteLine(STab + STab + "#region DataBaseQuery");
+
+                    if (cbAddGenerateRecord.Checked && cbAddSelectAll.Checked)
+                        AddSelectAll(tbl, fWrite, PluralClassName);
+
                     if (cbAddGenerateRecord.Checked)
                         AddGenerateRecords(tbl, fWrite);
 
+                    if (cbRegion.Checked)
+                        fWrite.WriteLine(STab + STab + "#endregion");
+
                     fWrite.WriteLine(STab + "}");
+
+                    if (cbGeneratePlural.Checked)
+                    {
+                        fWrite.WriteLine(STab + tbClassModifiers.Text + " class " + tbClassPrefix.Text + PluralClassName + " : List<" + tbClassPrefix.Text + SingleClassName + ">");
+                        fWrite.WriteLine(STab + "{");
+                        fWrite.WriteLine(STab + "}");
+                    }
+
                     fWrite.WriteLine("}");
                 }       
             }

@@ -32,6 +32,7 @@
             this.tbSqlFile = new System.Windows.Forms.TextBox();
             this.cbGenerateCs = new System.Windows.Forms.CheckBox();
             this.gbOptions = new System.Windows.Forms.GroupBox();
+            this.cbAddGenerateRecord = new System.Windows.Forms.CheckBox();
             this.tbInhirits = new System.Windows.Forms.TextBox();
             this.lInhirits = new System.Windows.Forms.Label();
             this.tbClassModifiers = new System.Windows.Forms.TextBox();
@@ -50,7 +51,8 @@
             this.bGenerate = new System.Windows.Forms.Button();
             this.dgvUsing = new System.Windows.Forms.DataGridView();
             this.lUsing = new System.Windows.Forms.Label();
-            this.cbAddGenerateRecord = new System.Windows.Forms.CheckBox();
+            this.cbGeneratePlural = new System.Windows.Forms.CheckBox();
+            this.cbAddSelectAll = new System.Windows.Forms.CheckBox();
             this.gbOptions.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvUsing)).BeginInit();
             this.SuspendLayout();
@@ -86,6 +88,7 @@
             // 
             // gbOptions
             // 
+            this.gbOptions.Controls.Add(this.cbGeneratePlural);
             this.gbOptions.Controls.Add(this.cbAddGenerateRecord);
             this.gbOptions.Controls.Add(this.tbInhirits);
             this.gbOptions.Controls.Add(this.lInhirits);
@@ -105,16 +108,26 @@
             this.gbOptions.Controls.Add(this.cbGenerateCs);
             this.gbOptions.Location = new System.Drawing.Point(12, 40);
             this.gbOptions.Name = "gbOptions";
-            this.gbOptions.Size = new System.Drawing.Size(260, 245);
+            this.gbOptions.Size = new System.Drawing.Size(342, 245);
             this.gbOptions.TabIndex = 3;
             this.gbOptions.TabStop = false;
             this.gbOptions.Text = "Options";
+            // 
+            // cbAddGenerateRecord
+            // 
+            this.cbAddGenerateRecord.AutoSize = true;
+            this.cbAddGenerateRecord.Location = new System.Drawing.Point(96, 114);
+            this.cbAddGenerateRecord.Name = "cbAddGenerateRecord";
+            this.cbAddGenerateRecord.Size = new System.Drawing.Size(127, 17);
+            this.cbAddGenerateRecord.TabIndex = 18;
+            this.cbAddGenerateRecord.Text = "Add GenerateRecord";
+            this.cbAddGenerateRecord.UseVisualStyleBackColor = true;
             // 
             // tbInhirits
             // 
             this.tbInhirits.Location = new System.Drawing.Point(90, 215);
             this.tbInhirits.Name = "tbInhirits";
-            this.tbInhirits.Size = new System.Drawing.Size(164, 20);
+            this.tbInhirits.Size = new System.Drawing.Size(246, 20);
             this.tbInhirits.TabIndex = 17;
             // 
             // lInhirits
@@ -130,7 +143,7 @@
             // 
             this.tbClassModifiers.Location = new System.Drawing.Point(90, 189);
             this.tbClassModifiers.Name = "tbClassModifiers";
-            this.tbClassModifiers.Size = new System.Drawing.Size(164, 20);
+            this.tbClassModifiers.Size = new System.Drawing.Size(246, 20);
             this.tbClassModifiers.TabIndex = 15;
             this.tbClassModifiers.Text = "public";
             // 
@@ -147,7 +160,7 @@
             // 
             this.tbNameSpace.Location = new System.Drawing.Point(90, 163);
             this.tbNameSpace.Name = "tbNameSpace";
-            this.tbNameSpace.Size = new System.Drawing.Size(164, 20);
+            this.tbNameSpace.Size = new System.Drawing.Size(246, 20);
             this.tbNameSpace.TabIndex = 13;
             this.tbNameSpace.Text = "ClassMaker";
             // 
@@ -263,35 +276,46 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dgvUsing.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvUsing.Location = new System.Drawing.Point(278, 69);
+            this.dgvUsing.Location = new System.Drawing.Point(363, 69);
             this.dgvUsing.Name = "dgvUsing";
-            this.dgvUsing.Size = new System.Drawing.Size(456, 216);
+            this.dgvUsing.Size = new System.Drawing.Size(371, 216);
             this.dgvUsing.TabIndex = 5;
             // 
             // lUsing
             // 
             this.lUsing.AutoSize = true;
-            this.lUsing.Location = new System.Drawing.Point(278, 53);
+            this.lUsing.Location = new System.Drawing.Point(360, 53);
             this.lUsing.Name = "lUsing";
             this.lUsing.Size = new System.Drawing.Size(69, 13);
             this.lUsing.TabIndex = 18;
             this.lUsing.Text = "Private Prefix";
             // 
-            // cbAddGenerateRecord
+            // cbGeneratePlural
             // 
-            this.cbAddGenerateRecord.AutoSize = true;
-            this.cbAddGenerateRecord.Location = new System.Drawing.Point(96, 114);
-            this.cbAddGenerateRecord.Name = "cbAddGenerateRecord";
-            this.cbAddGenerateRecord.Size = new System.Drawing.Size(127, 17);
-            this.cbAddGenerateRecord.TabIndex = 18;
-            this.cbAddGenerateRecord.Text = "Add GenerateRecord";
-            this.cbAddGenerateRecord.UseVisualStyleBackColor = true;
+            this.cbGeneratePlural.AutoSize = true;
+            this.cbGeneratePlural.Location = new System.Drawing.Point(115, 19);
+            this.cbGeneratePlural.Name = "cbGeneratePlural";
+            this.cbGeneratePlural.Size = new System.Drawing.Size(127, 17);
+            this.cbGeneratePlural.TabIndex = 19;
+            this.cbGeneratePlural.Text = "Generate Plural Class";
+            this.cbGeneratePlural.UseVisualStyleBackColor = true;
+            // 
+            // cbAddSelectAll
+            // 
+            this.cbAddSelectAll.AutoSize = true;
+            this.cbAddSelectAll.Location = new System.Drawing.Point(241, 154);
+            this.cbAddSelectAll.Name = "cbAddSelectAll";
+            this.cbAddSelectAll.Size = new System.Drawing.Size(89, 17);
+            this.cbAddSelectAll.TabIndex = 20;
+            this.cbAddSelectAll.Text = "Add SelectAll";
+            this.cbAddSelectAll.UseVisualStyleBackColor = true;
             // 
             // frmClassMaker
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(746, 322);
+            this.Controls.Add(this.cbAddSelectAll);
             this.Controls.Add(this.lUsing);
             this.Controls.Add(this.dgvUsing);
             this.Controls.Add(this.bGenerate);
@@ -333,6 +357,8 @@
         private System.Windows.Forms.DataGridView dgvUsing;
         private System.Windows.Forms.Label lUsing;
         private System.Windows.Forms.CheckBox cbAddGenerateRecord;
+        private System.Windows.Forms.CheckBox cbGeneratePlural;
+        private System.Windows.Forms.CheckBox cbAddSelectAll;
     }
 }
 
