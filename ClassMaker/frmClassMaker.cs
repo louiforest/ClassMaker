@@ -103,7 +103,7 @@ namespace ClassMaker
 
             PluralClassName = ClassName + "s";
 
-            fWrite.WriteLine(STab + STab +"private static " + PluralClassName + " GenerateRecords(MySqlDataReader reader, object argument)");
+            fWrite.WriteLine(STab + STab +"private static " + PluralClassName + " GenerateRecords(CDBReader reader, object argument)");
             fWrite.WriteLine(STab + STab + "{");
             fWrite.WriteLine(STab + STab + STab + PluralClassName + " records = new " + PluralClassName + "();");
             fWrite.WriteLine(STab + STab + STab + ClassName + " rec;");
@@ -144,8 +144,8 @@ namespace ClassMaker
             fWrite.WriteLine("");
             fWrite.WriteLine(STab + STab + STab + STab + "records.Add(rec);");
             fWrite.WriteLine(STab + STab + STab + "}");
-            fWrite.WriteLine(STab + STab + STab + "reader.Close();");
-            fWrite.WriteLine("");
+            //fWrite.WriteLine(STab + STab + STab + "reader.Close();");
+            //fWrite.WriteLine("");
             fWrite.WriteLine(STab + STab + STab + "return records;");
             fWrite.WriteLine(STab + STab + "}");
         }
@@ -164,9 +164,12 @@ namespace ClassMaker
             fWrite.WriteLine(STab + STab + STab + "Sql += " + Guil + "SELECT *" + Guil + " + Environment.NewLine;");
             fWrite.WriteLine(STab + STab + STab + "Sql += " + Guil + " FROM " + tbl.TableName + Guil + " + Environment.NewLine;");
             fWrite.WriteLine("");
-            fWrite.WriteLine(STab + STab + STab + "CDBConnection con = new CDBConnection();");
-            fWrite.WriteLine(STab + STab + STab + "response = GenerateRecords(con.ExecuteQuery(Sql), string.Empty);");
-            fWrite.WriteLine(STab + STab + STab + "con.CloseConnection();");
+            fWrite.WriteLine(STab + STab + STab + "CDBCommand cmd = new CDBCommand(CDBConnection.Instance(), Sql);");
+            fWrite.WriteLine(STab + STab + STab + "CDBReader reader = cmd.ExecuteQuery();");
+            fWrite.WriteLine("");
+            fWrite.WriteLine(STab + STab + STab + "response = GenerateRecords(reader, string.Empty);");
+            fWrite.WriteLine(STab + STab + STab + "if (response == null || response.Count == 0)");
+            fWrite.WriteLine(STab + STab + STab + STab + "return null;");
             fWrite.WriteLine("");
             fWrite.WriteLine(STab + STab + STab + "return response;");
 
