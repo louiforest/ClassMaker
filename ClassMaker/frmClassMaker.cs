@@ -144,8 +144,8 @@ namespace ClassMaker
             fWrite.WriteLine("");
             fWrite.WriteLine(STab + STab + STab + STab + "records.Add(rec);");
             fWrite.WriteLine(STab + STab + STab + "}");
-            //fWrite.WriteLine(STab + STab + STab + "reader.Close();");
-            //fWrite.WriteLine("");
+            fWrite.WriteLine(STab + STab + STab + "reader.Close();");
+            fWrite.WriteLine("");
             fWrite.WriteLine(STab + STab + STab + "return records;");
             fWrite.WriteLine(STab + STab + "}");
         }
