@@ -162,7 +162,7 @@ namespace ClassMaker
             fWrite.WriteLine(STab + STab + STab + "string Sql = string.Empty;");
             fWrite.WriteLine("");
             fWrite.WriteLine(STab + STab + STab + "Sql += " + Guil + "SELECT *" + Guil + " + Environment.NewLine;");
-            fWrite.WriteLine(STab + STab + STab + "Sql += " + Guil + " FROM " + tbl.TableName + Guil + " + Environment.NewLine;");
+            fWrite.WriteLine(STab + STab + STab + "Sql += " + Guil + " FROM " + tbl.TableName + Guil + ";");
             fWrite.WriteLine("");
             fWrite.WriteLine(STab + STab + STab + "CDBCommand cmd = new CDBCommand(CDBConnection.Instance(), Sql);");
             fWrite.WriteLine(STab + STab + STab + "CDBReader reader = cmd.ExecuteQuery();");

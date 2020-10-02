@@ -29,7 +29,7 @@ namespace ClassMaker
                     case enumDataType.Adouble:
                         return "double";
                     case enumDataType.Afloat:
-                        return "float";
+                        return "float";                    
                     case enumDataType.ADateTime:
                         return "DateTime";
                     case enumDataType.Undefined:                        
@@ -102,6 +102,7 @@ namespace ClassMaker
                     return enumDataType.Aint;
                 case "DOUBLE":
                     return enumDataType.Adouble;
+                case "REAL":
                 case "FLOAT":
                     return enumDataType.Afloat;
                 case "KEY":
