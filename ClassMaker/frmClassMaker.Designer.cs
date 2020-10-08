@@ -32,6 +32,7 @@
             this.tbSqlFile = new System.Windows.Forms.TextBox();
             this.cbGenerateCs = new System.Windows.Forms.CheckBox();
             this.gbOptions = new System.Windows.Forms.GroupBox();
+            this.cbGeneratePlural = new System.Windows.Forms.CheckBox();
             this.cbAddGenerateRecord = new System.Windows.Forms.CheckBox();
             this.tbInhirits = new System.Windows.Forms.TextBox();
             this.lInhirits = new System.Windows.Forms.Label();
@@ -51,8 +52,8 @@
             this.bGenerate = new System.Windows.Forms.Button();
             this.dgvUsing = new System.Windows.Forms.DataGridView();
             this.lUsing = new System.Windows.Forms.Label();
-            this.cbGeneratePlural = new System.Windows.Forms.CheckBox();
             this.cbAddSelectAll = new System.Windows.Forms.CheckBox();
+            this.cbUserPrivates = new System.Windows.Forms.CheckBox();
             this.gbOptions.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvUsing)).BeginInit();
             this.SuspendLayout();
@@ -88,6 +89,7 @@
             // 
             // gbOptions
             // 
+            this.gbOptions.Controls.Add(this.cbUserPrivates);
             this.gbOptions.Controls.Add(this.cbGeneratePlural);
             this.gbOptions.Controls.Add(this.cbAddGenerateRecord);
             this.gbOptions.Controls.Add(this.tbInhirits);
@@ -108,10 +110,20 @@
             this.gbOptions.Controls.Add(this.cbGenerateCs);
             this.gbOptions.Location = new System.Drawing.Point(12, 40);
             this.gbOptions.Name = "gbOptions";
-            this.gbOptions.Size = new System.Drawing.Size(342, 245);
+            this.gbOptions.Size = new System.Drawing.Size(342, 270);
             this.gbOptions.TabIndex = 3;
             this.gbOptions.TabStop = false;
             this.gbOptions.Text = "Options";
+            // 
+            // cbGeneratePlural
+            // 
+            this.cbGeneratePlural.AutoSize = true;
+            this.cbGeneratePlural.Location = new System.Drawing.Point(115, 19);
+            this.cbGeneratePlural.Name = "cbGeneratePlural";
+            this.cbGeneratePlural.Size = new System.Drawing.Size(127, 17);
+            this.cbGeneratePlural.TabIndex = 19;
+            this.cbGeneratePlural.Text = "Generate Plural Class";
+            this.cbGeneratePlural.UseVisualStyleBackColor = true;
             // 
             // cbAddGenerateRecord
             // 
@@ -125,7 +137,7 @@
             // 
             // tbInhirits
             // 
-            this.tbInhirits.Location = new System.Drawing.Point(90, 215);
+            this.tbInhirits.Location = new System.Drawing.Point(90, 244);
             this.tbInhirits.Name = "tbInhirits";
             this.tbInhirits.Size = new System.Drawing.Size(246, 20);
             this.tbInhirits.TabIndex = 17;
@@ -133,7 +145,7 @@
             // lInhirits
             // 
             this.lInhirits.AutoSize = true;
-            this.lInhirits.Location = new System.Drawing.Point(7, 218);
+            this.lInhirits.Location = new System.Drawing.Point(7, 247);
             this.lInhirits.Name = "lInhirits";
             this.lInhirits.Size = new System.Drawing.Size(37, 13);
             this.lInhirits.TabIndex = 16;
@@ -141,7 +153,7 @@
             // 
             // tbClassModifiers
             // 
-            this.tbClassModifiers.Location = new System.Drawing.Point(90, 189);
+            this.tbClassModifiers.Location = new System.Drawing.Point(90, 218);
             this.tbClassModifiers.Name = "tbClassModifiers";
             this.tbClassModifiers.Size = new System.Drawing.Size(246, 20);
             this.tbClassModifiers.TabIndex = 15;
@@ -150,7 +162,7 @@
             // lClassModifiers
             // 
             this.lClassModifiers.AutoSize = true;
-            this.lClassModifiers.Location = new System.Drawing.Point(7, 192);
+            this.lClassModifiers.Location = new System.Drawing.Point(7, 221);
             this.lClassModifiers.Name = "lClassModifiers";
             this.lClassModifiers.Size = new System.Drawing.Size(77, 13);
             this.lClassModifiers.TabIndex = 14;
@@ -158,7 +170,7 @@
             // 
             // tbNameSpace
             // 
-            this.tbNameSpace.Location = new System.Drawing.Point(90, 163);
+            this.tbNameSpace.Location = new System.Drawing.Point(90, 192);
             this.tbNameSpace.Name = "tbNameSpace";
             this.tbNameSpace.Size = new System.Drawing.Size(246, 20);
             this.tbNameSpace.TabIndex = 13;
@@ -167,7 +179,7 @@
             // lNameSpace
             // 
             this.lNameSpace.AutoSize = true;
-            this.lNameSpace.Location = new System.Drawing.Point(7, 166);
+            this.lNameSpace.Location = new System.Drawing.Point(7, 195);
             this.lNameSpace.Name = "lNameSpace";
             this.lNameSpace.Size = new System.Drawing.Size(69, 13);
             this.lNameSpace.TabIndex = 12;
@@ -175,7 +187,7 @@
             // 
             // tbClassPrefix
             // 
-            this.tbClassPrefix.Location = new System.Drawing.Point(90, 137);
+            this.tbClassPrefix.Location = new System.Drawing.Point(90, 166);
             this.tbClassPrefix.Name = "tbClassPrefix";
             this.tbClassPrefix.Size = new System.Drawing.Size(53, 20);
             this.tbClassPrefix.TabIndex = 11;
@@ -184,7 +196,7 @@
             // lClassPrefix
             // 
             this.lClassPrefix.AutoSize = true;
-            this.lClassPrefix.Location = new System.Drawing.Point(7, 140);
+            this.lClassPrefix.Location = new System.Drawing.Point(7, 169);
             this.lClassPrefix.Name = "lClassPrefix";
             this.lClassPrefix.Size = new System.Drawing.Size(61, 13);
             this.lClassPrefix.TabIndex = 10;
@@ -290,16 +302,6 @@
             this.lUsing.TabIndex = 18;
             this.lUsing.Text = "Private Prefix";
             // 
-            // cbGeneratePlural
-            // 
-            this.cbGeneratePlural.AutoSize = true;
-            this.cbGeneratePlural.Location = new System.Drawing.Point(115, 19);
-            this.cbGeneratePlural.Name = "cbGeneratePlural";
-            this.cbGeneratePlural.Size = new System.Drawing.Size(127, 17);
-            this.cbGeneratePlural.TabIndex = 19;
-            this.cbGeneratePlural.Text = "Generate Plural Class";
-            this.cbGeneratePlural.UseVisualStyleBackColor = true;
-            // 
             // cbAddSelectAll
             // 
             this.cbAddSelectAll.AutoSize = true;
@@ -309,6 +311,16 @@
             this.cbAddSelectAll.TabIndex = 20;
             this.cbAddSelectAll.Text = "Add SelectAll";
             this.cbAddSelectAll.UseVisualStyleBackColor = true;
+            // 
+            // cbUserPrivates
+            // 
+            this.cbUserPrivates.AutoSize = true;
+            this.cbUserPrivates.Location = new System.Drawing.Point(96, 137);
+            this.cbUserPrivates.Name = "cbUserPrivates";
+            this.cbUserPrivates.Size = new System.Drawing.Size(181, 17);
+            this.cbUserPrivates.TabIndex = 20;
+            this.cbUserPrivates.Text = "Use privates in Generate Record";
+            this.cbUserPrivates.UseVisualStyleBackColor = true;
             // 
             // frmClassMaker
             // 
@@ -359,6 +371,7 @@
         private System.Windows.Forms.CheckBox cbAddGenerateRecord;
         private System.Windows.Forms.CheckBox cbGeneratePlural;
         private System.Windows.Forms.CheckBox cbAddSelectAll;
+        private System.Windows.Forms.CheckBox cbUserPrivates;
     }
 }
 

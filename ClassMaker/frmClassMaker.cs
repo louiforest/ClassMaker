@@ -91,8 +91,9 @@ namespace ClassMaker
 
         private void AddGenerateRecords(CSqlTable tbl, System.IO.StreamWriter fWrite)
         {
-            string ClassName = string.Empty;
             string PluralClassName = string.Empty;
+            string ClassName = string.Empty;
+            string ItemName = string.Empty;
             string STab = "    ";
             string Q = '"'.ToString();
 
@@ -116,22 +117,27 @@ namespace ClassMaker
 
             foreach (CSqlItem itm in tbl.fields)
             {
+                if (cbUserPrivates.Checked)
+                    ItemName = tbPrivatePrefix.Text + itm.Name;
+                else
+                    ItemName = itm.Name;
+
                 switch (itm.DataType)
                 {
                     case enumDataType.Astring:
-                        fWrite.WriteLine(STab + STab + STab + STab + "rec." + itm.Name + " = reader.GetString(" + Q + itm.Name + Q + ");");                
+                        fWrite.WriteLine(STab + STab + STab + STab + "rec." + ItemName + " = reader.GetString(" + Q + itm.Name + Q + ");");                
                         break;
                     case enumDataType.Aint:
-                        fWrite.WriteLine(STab + STab + STab + STab + "rec." + itm.Name + " = reader.GetInt32(" + Q + itm.Name + Q + ");");
+                        fWrite.WriteLine(STab + STab + STab + STab + "rec." + ItemName + " = reader.GetInt32(" + Q + itm.Name + Q + ");");
                         break;
                     case enumDataType.Adouble:
-                        fWrite.WriteLine(STab + STab + STab + STab + "rec." + itm.Name + " = reader.GetDouble(" + Q + itm.Name + Q + ");");
+                        fWrite.WriteLine(STab + STab + STab + STab + "rec." + ItemName + " = reader.GetDouble(" + Q + itm.Name + Q + ");");
                         break;
                     case enumDataType.Afloat:
-                        fWrite.WriteLine(STab + STab + STab + STab + "rec." + itm.Name + " = reader.GetFloat(" + Q + itm.Name + Q + ");");
+                        fWrite.WriteLine(STab + STab + STab + STab + "rec." + ItemName + " = reader.GetFloat(" + Q + itm.Name + Q + ");");
                         break;
                     case enumDataType.ADateTime:
-                        fWrite.WriteLine(STab + STab + STab + STab + "rec." + itm.Name + " = reader.GetDateTime(" + Q + itm.Name + Q + ");");
+                        fWrite.WriteLine(STab + STab + STab + STab + "rec." + ItemName + " = reader.GetDateTime(" + Q + itm.Name + Q + ");");
                         break;
                     case enumDataType.Invalid:    
                     case enumDataType.Undefined:
@@ -174,6 +180,7 @@ namespace ClassMaker
             fWrite.WriteLine(STab + STab + STab + "return response;");
 
             fWrite.WriteLine(STab + STab + "}");
+            fWrite.WriteLine("");            
         }
 
         private void GenerateClassFiles(List<CSqlTable> tables)
@@ -259,6 +266,7 @@ namespace ClassMaker
 
                     if (cbGeneratePlural.Checked)
                     {
+                        fWrite.WriteLine("");
                         fWrite.WriteLine(STab + tbClassModifiers.Text + " class " + tbClassPrefix.Text + PluralClassName + " : List<" + tbClassPrefix.Text + SingleClassName + ">");
                         fWrite.WriteLine(STab + "{");
                         fWrite.WriteLine(STab + "}");
