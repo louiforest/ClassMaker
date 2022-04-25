@@ -156,6 +156,112 @@ namespace ClassMaker
             fWrite.WriteLine(STab + STab + "}");
         }
 
+        private void AddSave(CSqlTable tbl, System.IO.StreamWriter fWrite, string PluralClassName)
+        {
+            string FieldsAndParams = string.Empty;
+            string FieldsOnly = string.Empty;
+            string ParamsOnly = string.Empty;
+            string STab = "    ";
+            string Guil = '"'.ToString();            
+
+            foreach (CSqlItem itm in tbl.fields)
+            {
+                FieldsAndParams += itm.Name + " = @p" + itm.Name.ToLower() + ", ";
+                FieldsOnly += itm.Name + ", ";
+                ParamsOnly += "@p" + itm.Name.ToLower() + ", ";
+            }
+            
+            if (FieldsAndParams.Length > 2)
+                FieldsAndParams = FieldsAndParams.Substring(0, FieldsAndParams.Length - 2);
+            if (FieldsOnly.Length > 2)
+                FieldsOnly = FieldsOnly.Substring(0, FieldsOnly.Length - 2);
+            if (ParamsOnly.Length > 2)
+                ParamsOnly = ParamsOnly.Substring(0, ParamsOnly.Length - 2);
+
+            //Save
+            fWrite.WriteLine(STab + STab + "public bool Save()");
+            fWrite.WriteLine(STab + STab + "{");
+
+            if (cbUserPrivates.Checked)
+                fWrite.WriteLine(STab + STab + STab + "if (" + tbPrivatePrefix.Text + tbl.fields[0].Name + " == 0)"); //On assume que la clée est en 1er
+            else
+                fWrite.WriteLine(STab + STab + STab + "if (" + tbl.fields[0].Name + " == 0)"); //On assume que la clée est en 1er
+
+            fWrite.WriteLine(STab + STab + STab + STab + "return Insert();");
+            fWrite.WriteLine(STab + STab + STab + "else");
+            fWrite.WriteLine(STab + STab + STab + STab + "return Update();");
+            fWrite.WriteLine(STab + STab + "}");
+            fWrite.WriteLine("");
+
+            //Insert
+            fWrite.WriteLine(STab + STab + "public bool Insert()");
+            fWrite.WriteLine(STab + STab + "{");
+            fWrite.WriteLine(STab + STab + STab + "string Sql = string.Empty;");
+            fWrite.WriteLine(STab + STab + STab + "int RowsAffected = 0;");
+            fWrite.WriteLine("");
+            fWrite.WriteLine(STab + STab + STab + "//Check required fields");
+            fWrite.WriteLine("");
+
+            fWrite.WriteLine(STab + STab + STab + "Sql += " + Guil + "INSERT INTO " + tbl.TableName + Guil + " + Environment.NewLine;");
+            fWrite.WriteLine(STab + STab + STab + "Sql += " + Guil + " (" + FieldsOnly + ")" + Guil + " + Environment.NewLine;");
+            fWrite.WriteLine(STab + STab + STab + "Sql += " + Guil + " VALUES (" + ParamsOnly + ");" + Guil + ";");
+            fWrite.WriteLine("");
+            fWrite.WriteLine(STab + STab + STab + "CDBCommand cmd = new CDBCommand(CDBConnection.Instance(), Sql);");
+            fWrite.WriteLine("");
+
+            foreach (CSqlItem Itm in tbl.fields)
+            {
+                string VarName = string.Empty;
+                if (cbUserPrivates.Checked)
+                    VarName = tbPrivatePrefix.Text + Itm.Name;
+                else
+                    VarName = Itm.Name;
+
+                fWrite.WriteLine(STab + STab + STab + "cmd.AddParameter(" + Guil + "@p" + Itm.Name.ToLower() + Guil + ", " + VarName + ");");
+            }
+            
+            fWrite.WriteLine("");
+            fWrite.WriteLine(STab + STab + STab + "RowsAffected = cmd.ExecuteNonQuery();");
+            fWrite.WriteLine("");
+            fWrite.WriteLine(STab + STab + STab + "return RowsAffected == 1;");
+            fWrite.WriteLine(STab + STab + "}");
+            fWrite.WriteLine("");
+
+            //Update
+            fWrite.WriteLine(STab + STab + "public bool Update()");
+            fWrite.WriteLine(STab + STab + "{");
+            fWrite.WriteLine(STab + STab + STab + "string Sql = string.Empty;");
+            fWrite.WriteLine(STab + STab + STab + "int RowsAffected = 0;");
+            fWrite.WriteLine("");
+            fWrite.WriteLine(STab + STab + STab + "//Check required fields");
+            fWrite.WriteLine("");
+
+            fWrite.WriteLine(STab + STab + STab + "Sql += " + Guil + "UPDATE " + tbl.TableName + " SET" + Guil + " + Environment.NewLine;");
+            fWrite.WriteLine(STab + STab + STab + "Sql += " + Guil + " " + FieldsAndParams + Guil + " + Environment.NewLine;");
+            fWrite.WriteLine(STab + STab + STab + "Sql += " + Guil + " WHERE " + tbl.fields[0].Name + " = @p" + tbl.fields[0].Name + ";" + Guil + " + Environment.NewLine;");
+
+            fWrite.WriteLine("");
+            fWrite.WriteLine(STab + STab + STab + "CDBCommand cmd = new CDBCommand(CDBConnection.Instance(), Sql);");
+            fWrite.WriteLine("");
+
+            foreach (CSqlItem Itm in tbl.fields)
+            {
+                string VarName = string.Empty;
+                if (cbUserPrivates.Checked)
+                    VarName = tbPrivatePrefix.Text + Itm.Name;
+                else
+                    VarName = Itm.Name;
+
+                fWrite.WriteLine(STab + STab + STab + "cmd.AddParameter(" + Guil + "@p" + Itm.Name.ToLower() + Guil + ", " + VarName + ");");
+            }
+
+            fWrite.WriteLine("");
+            fWrite.WriteLine(STab + STab + STab + "RowsAffected = cmd.ExecuteNonQuery();");
+            fWrite.WriteLine("");
+            fWrite.WriteLine(STab + STab + STab + "return RowsAffected == 1;");
+            fWrite.WriteLine(STab + STab + "}");            
+        }
+
         private void AddSelectAll(CSqlTable tbl, System.IO.StreamWriter fWrite, string PluralClassName)
         {
             string STab = "    ";
@@ -168,7 +274,9 @@ namespace ClassMaker
             fWrite.WriteLine(STab + STab + STab + "string Sql = string.Empty;");
             fWrite.WriteLine("");
             fWrite.WriteLine(STab + STab + STab + "Sql += " + Guil + "SELECT *" + Guil + " + Environment.NewLine;");
-            fWrite.WriteLine(STab + STab + STab + "Sql += " + Guil + " FROM " + tbl.TableName + Guil + ";");
+            fWrite.WriteLine(STab + STab + STab + "Sql += " + Guil + " FROM " + tbl.TableName + Guil + " + Environment.NewLine;");
+            fWrite.WriteLine(STab + STab + STab + "//Sql += " + Guil + " ORDER BY XXXXX" + Guil);
+
             fWrite.WriteLine("");
             fWrite.WriteLine(STab + STab + STab + "CDBCommand cmd = new CDBCommand(CDBConnection.Instance(), Sql);");
             fWrite.WriteLine(STab + STab + STab + "CDBReader reader = cmd.ExecuteQuery();");
@@ -179,8 +287,7 @@ namespace ClassMaker
             fWrite.WriteLine("");
             fWrite.WriteLine(STab + STab + STab + "return response;");
 
-            fWrite.WriteLine(STab + STab + "}");
-            fWrite.WriteLine("");            
+            fWrite.WriteLine(STab + STab + "}");            
         }
 
         private void GenerateClassFiles(List<CSqlTable> tables)
@@ -243,6 +350,14 @@ namespace ClassMaker
                         fWrite.WriteLine(STab + STab + "#endregion");
                         fWrite.WriteLine(string.Empty);
                         fWrite.WriteLine(STab + STab + "#region DataBaseNonQuery");
+
+                    }
+
+                    if (cbAddGenerateRecord.Checked && cbAddSave.Checked)
+                        AddSave(tbl, fWrite, PluralClassName);
+
+                    if (cbRegion.Checked)
+                    {    
                         fWrite.WriteLine(STab + STab + "#endregion");
                         fWrite.WriteLine(string.Empty);
                         fWrite.WriteLine(STab + STab + "#region OtherMethods");

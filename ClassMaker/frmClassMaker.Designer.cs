@@ -32,6 +32,7 @@
             this.tbSqlFile = new System.Windows.Forms.TextBox();
             this.cbGenerateCs = new System.Windows.Forms.CheckBox();
             this.gbOptions = new System.Windows.Forms.GroupBox();
+            this.cbUserPrivates = new System.Windows.Forms.CheckBox();
             this.cbGeneratePlural = new System.Windows.Forms.CheckBox();
             this.cbAddGenerateRecord = new System.Windows.Forms.CheckBox();
             this.tbInhirits = new System.Windows.Forms.TextBox();
@@ -53,7 +54,7 @@
             this.dgvUsing = new System.Windows.Forms.DataGridView();
             this.lUsing = new System.Windows.Forms.Label();
             this.cbAddSelectAll = new System.Windows.Forms.CheckBox();
-            this.cbUserPrivates = new System.Windows.Forms.CheckBox();
+            this.cbAddSave = new System.Windows.Forms.CheckBox();
             this.gbOptions.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvUsing)).BeginInit();
             this.SuspendLayout();
@@ -89,6 +90,7 @@
             // 
             // gbOptions
             // 
+            this.gbOptions.Controls.Add(this.cbAddSave);
             this.gbOptions.Controls.Add(this.cbUserPrivates);
             this.gbOptions.Controls.Add(this.cbGeneratePlural);
             this.gbOptions.Controls.Add(this.cbAddGenerateRecord);
@@ -114,6 +116,16 @@
             this.gbOptions.TabIndex = 3;
             this.gbOptions.TabStop = false;
             this.gbOptions.Text = "Options";
+            // 
+            // cbUserPrivates
+            // 
+            this.cbUserPrivates.AutoSize = true;
+            this.cbUserPrivates.Location = new System.Drawing.Point(6, 137);
+            this.cbUserPrivates.Name = "cbUserPrivates";
+            this.cbUserPrivates.Size = new System.Drawing.Size(181, 17);
+            this.cbUserPrivates.TabIndex = 20;
+            this.cbUserPrivates.Text = "Use privates in Generate Record";
+            this.cbUserPrivates.UseVisualStyleBackColor = true;
             // 
             // cbGeneratePlural
             // 
@@ -312,15 +324,15 @@
             this.cbAddSelectAll.Text = "Add SelectAll";
             this.cbAddSelectAll.UseVisualStyleBackColor = true;
             // 
-            // cbUserPrivates
+            // cbAddSave
             // 
-            this.cbUserPrivates.AutoSize = true;
-            this.cbUserPrivates.Location = new System.Drawing.Point(96, 137);
-            this.cbUserPrivates.Name = "cbUserPrivates";
-            this.cbUserPrivates.Size = new System.Drawing.Size(181, 17);
-            this.cbUserPrivates.TabIndex = 20;
-            this.cbUserPrivates.Text = "Use privates in Generate Record";
-            this.cbUserPrivates.UseVisualStyleBackColor = true;
+            this.cbAddSave.AutoSize = true;
+            this.cbAddSave.Location = new System.Drawing.Point(229, 137);
+            this.cbAddSave.Name = "cbAddSave";
+            this.cbAddSave.Size = new System.Drawing.Size(73, 17);
+            this.cbAddSave.TabIndex = 21;
+            this.cbAddSave.Text = "Add Save";
+            this.cbAddSave.UseVisualStyleBackColor = true;
             // 
             // frmClassMaker
             // 
@@ -372,6 +384,7 @@
         private System.Windows.Forms.CheckBox cbGeneratePlural;
         private System.Windows.Forms.CheckBox cbAddSelectAll;
         private System.Windows.Forms.CheckBox cbUserPrivates;
+        private System.Windows.Forms.CheckBox cbAddSave;
     }
 }
 
